@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" id="viewport" />
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<title>移动端 手动滚动轮播图</title>
+	<style type="text/css">
+	html{
+		height:100vh;
+		}
+		#carousel {
+			transition: all 1s linear 0s;
+		}
+		/* 定义动画 */
+		 @keyframes move {
+            0% {
+                transform: translateX(0px);
+            }  
+            100% {
+                transform: translateX(-800px);
+            } 
+        }
+		/* #carousel{
+			 animation: 10s move linear infinite;
+		} */
+		/* #carousel{
+			background: red;
+		} */
+	</style>
+</head>
+<body>
+	<div class="banner" id="banner">
+		<ul id="carousel">
+			<li><img src="images/banner0.jpg" alt="" /></li>
+			<li><img src="images/banner1.jpg" alt="" /></li>
+			<li><img src="images/banner2.jpg" alt="" /></li>
+			<li><img src="images/banner3.jpg" alt="" /></li>
+			<li><img src="images/banner4.jpg" alt="" /></li>
+			<li><img src="images/banner0.jpg" alt="" /></li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+	 /**
+			*  carousel  created by qiphon
+			*    css3  animate
+			*    js    animationend
+			*  @params  wraperEl  String  外层包裹的元素（类名或ID名）
+			*  @params  itemEl    String  内部的元素（每个要执行动画的元素）（类名或ID名）
+			*  @params  options   Object
+			*              interTimer  number  轮播执行的时间（大于零，默认 5s）
+			*              interAutorun  boolean  轮播是否自动播放（默认true）
+			*              moveDirection  string ( 'vertical' 纵向, 'horizontal' 横向（默认） )
+			*
+			*  @return  carouselObj  object  额外手动控制轮播的js
+			*             startInter  Function  开启轮播图定时器
+			*             removeInter Function  删除轮播定时器
+			*             run         Function(key [, index])  控制轮播的函数
+			*                           key  number  轮播的方向 （ -1： 正向， 1：反向 ），默认情况下自动轮播下一个
+			*                           index  number  下一个要出现的banner ，值是下一个banner的index（从 0 开始）
+		   */
+	//定义方法 用于 手动轮播图
+	function ToTochMoveFun(wraperEl, itemEl, options = {}){
+			// 获取元素
+		var carousel = document.querySelector(wraperEl);
+		var lis = carousel.querySelectorAll(itemEl);
+		var length = lis.length - 1;
+		// 定义信号量
+		var idx = 0;
+		// 计算图片的比列
+		// 获取当前视口的宽
+		var width = document.documentElement.clientWidth;
+		var interTimer = options.interTimer || 5;
+		// 赋值banner的高度
+		// 定义变量 用于中专
+		var left = 0;
+		// 定义锁
+		var lock = true;
+		var inter = null;
+		var touchMove = options.touchMove?options.touchMove:false
+		if(touchMove){
+			AutoStartMove(idx)
+			ToTouchMoveFn(carousel)
+		}else{
+			AutoStartMove()
+		}
+						//自动轮播
+		function AutoStartMove(idx) {
+			startInter(idx)
+		}
+		function startInter(idx) {
+			// 函数节流
+			if (!lock) {
+				return;
+			}
+			clearInterval(inter)
+			inter = setInterval(function () {
+				idx++
+				if (idx > length) {
+					idx = 0;
+					carousel.style.transition = "none";
+					carousel.style.left = - idx * width + "px";
+					run(idx)
+				} else {
+					carousel.style.transition = "all 1s linear 0s ";
+					run(idx)
+				}
+			}, interTimer * 1000)
+		}
+		// 定义一个方法 用于图片的移动
+		function run(idx) {
+			carousel.style.left = -idx * width + "px";
+		}
+
+		// 手动轮播
+		function ToTouchMoveFn(carousel){
+			// 添加touchstart事件
+			carousel.addEventListener("touchstart", function (e) {
+				// 函数节流
+				if (!lock) {
+					return;
+				}
+				//当开始移动 
+				clearInterval(inter)
+				lock = true
+				// 取消过度
+				carousel.style.transition = "none";
+				// 获取手指触摸时候的位置
+				left = e.touches[0].clientX;
+			})
+			// 添加touchmove事件
+			carousel.addEventListener("touchmove", function (e) {
+				// 函数节流
+				if (!lock) {
+					return;
+				}
+				// clearInterval(inter)
+				// 获取手指移动时候的位置
+				var x = e.touches[0].clientX;
+				// 当idx === 0的时候并且此时往右滑动，应该出现的是最后一张图片
+				if (idx === 0 && x > left) {
+					console.log("进来了")
+					carousel.style.left = -width * length + x - left + "px";
+					return;
+				}
+				// 让图片跟随手指移动， 就是改变carousel的定位值
+				if(touchMove){
+					carousel.style.left = -idx * (width) + x - left + "px";
+				}else{
+					carousel.style.left = -idx * width + x - left + "px";
+				}
+			})
+			// 添加touchend事件
+			carousel.addEventListener("touchend", function (e) {
+				// 函数节流
+				if (!lock) {
+					return;
+				}
+				// 关闭锁
+				lock = false;
+				// 当手指离开添加过度效果
+				carousel.style.transition = "all 1s linear 0s";
+				// 获取手指离开后的位置
+				var x = e.changedTouches[0].clientX;
+				// 判断向左还是向右滑动
+				if (x > left) {
+					// 说明是向右滑动， 图片应该从左侧出现，等价于左按钮事件
+					// 信号量--
+					idx--;
+					// 别界判定
+					if (idx < 0) {
+						idx = length - 1;
+					}
+				} else if (x < left) {
+					// 说明是向左滑动， 图片应该从右侧出现， 等价于右按钮点击事件
+					// 信号量++
+					idx++;
+					// 边界判定
+					// 开启延时器
+				} else {
+					lock = true;
+					// 说明没有滑动
+					return;
+				}
+				// 改变carousel的定位left值
+				carousel.style.left = - idx * width + "px";
+			})
+			// 添加过度完成事件
+			carousel.addEventListener("transitionend", function () {
+				if (idx > length - 1) {
+					// 取消过度
+					carousel.style.transition = "none";
+					idx = 0;
+					carousel.style.left = - idx * width + "px";
+				}
+				lock = true;
+				//判断是否是自动开始
+				if(touchMove){
+					AutoStartMove(idx)
+				}
+			})
+		}
+}
+	ToTochMoveFun("#carousel","li",{touchMove:true})
+	</script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+* {
+    margin                     : 0;
+    padding                    : 0;
+    box-sizing                 : border-box;
+    -webkit-tap-highlight-color: transparent;
+    list-style                 : none;
+    text-decoration            : none;
+}
+
+body {
+    padding-top: 60px;
+    min-width  : 1200px;
+    background : #fff;
+    position   : relative;
+    font-family: 'PingFangSC''Microsoft YaHei';
+}
+
+.text-center {
+    text-align: center;
+}
+
+.inline-box {
+    display: inline-block;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+/* banner ==================这里是正式的内容 */
+.carousel {
+    position: relative;
+}
+
+.carousel .content-wraper {
+    transform: translate(0, 0, 0);
+    position: relative;
+    overflow: hidden;
+    width   : 100%;
+}
+
+.content-wraper .item {
+    position  : relative;
+    display   : none;
+}
+
+.content-wraper>.active,
+.content-wraper>.carousel-next,
+.content-wraper>.carousel-prev {
+    display: block;
+    left: 0;
+}
+
+.content-wraper>.active {
+    left: 0;
+}
+
+.content-wraper>.carousel-next,
+.content-wraper>.carousel-prev {
+    position: absolute;
+    top     : 0;
+    width   : 100%;
+}
+
+.content-wraper>.carousel-next.carousel-h-left {
+    left: 100%;
+}
+
+.content-wraper>.carousel-prev.carousel-h-right {
+    left: -100%;
+}
+.content-wraper > .carousel-h-left{
+    animation: carousel-h-left .5s ease-in-out forwards;
+}
+.content-wraper > .carousel-h-right{
+    animation: carousel-h-right .5s ease-in-out forwards;
+}
+@keyframes carousel-h-left {
+    from {
+        transform: translate3d(0, 0 ,0);
+    }
+    to {
+        transform: translate3d(-100%, 0 ,0);
+    }
+}
+
+@keyframes carousel-h-right {
+    from {
+        transform: translate3d(0, 0 ,0);
+    }
+    to {
+        transform: translate3d(100%, 0 ,0);
+    }
+}
+/* 纵向样式 */
+.content-wraper>.carousel-next.carousel-v-top {
+    top: 100%;
+}
+
+.content-wraper>.carousel-prev.carousel-v-bottom {
+    top: -100%;
+}
+.content-wraper > .carousel-v-top{
+    animation: carousel-v-top .5s ease-in-out forwards;
+}
+.content-wraper > .carousel-v-bottom{
+    animation: carousel-v-bottom .5s ease-in-out forwards;
+}
+@keyframes carousel-v-top {
+    from {
+        transform: translate3d(0, 0 ,0);
+    }
+    to {
+        transform: translate3d(0, -100% ,0);
+    }
+}
+@keyframes carousel-v-bottom {
+    from {
+        transform: translate3d(0, 0 ,0);
+    }
+    to {
+        transform: translate3d(0, 100% ,0);
+    }
+}
+
+/* 下面是辅助样式 ======================= */
+.carousel .item img {
+    display: block;
+    width  : 100%;
+}
+
+.carousel .scan-code {
+    position     : absolute;
+    top          : 117px;
+    right        : 160px;
+    width        : 172px;
+    padding      : 16px;
+    background   : rgba(0, 0, 0, .6);
+    border-radius: 4px;
+}
+
+.carousel .scan-code p {
+    font-size     : 18px;
+    font-weight   : 500;
+    color         : rgba(255, 255, 255, 1);
+    line-height   : 25px;
+    letter-spacing: 5px;
+}
+
+.carousel .scan-code img {
+    display   : block;
+    width     : 140px;
+    margin-top: 10px;
+}
+
+/* 轮播图结束 ================================== */
+/* floor */
+
+.floor {
+    padding: 80px 0;
+}
+
+.floor .con {
+    width   : 1000px;
+    overflow: hidden;
+    margin  : 0 auto;
+}
+
+.floor .title img {
+    height       : 90px;
+    display      : block;
+    margin       : 0 auto 60px;
+    /* background: #fff; */
+}
+
+.process-con {
+    display: block;
+    margin : 0 auto;
+    width  : 800px;
+}
